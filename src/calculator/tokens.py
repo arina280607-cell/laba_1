@@ -9,9 +9,13 @@ Token = tuple[str, float | None]  # ("NUM", 12.5) или ("+", None) и т.д.
 def get_tokens(expr: str) -> list[Token]:
     """
     Возвращает токены из исходного выражения
+
+    Разбивает строку на токены с помощью регулярного выражения
+
+    Для баланса скобок используется стэк
+
     :param expr: выражение
     :return: список токенов
-
     """
 
     regex = re.compile(r"""
@@ -50,8 +54,8 @@ def get_tokens(expr: str) -> list[Token]:
             else:
                 output.append((element, None))
     if not parenthesis.is_empty():
-        print(parenthesis)
         raise ParenthesisError("Несбалансированные скобки: есть незакрытые скобки")
 
     output.append(('EOF', None))
     return output
+

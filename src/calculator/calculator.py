@@ -1,5 +1,5 @@
 from src.calculator.tokens import get_tokens
-from src.utils.errors import ParenthesisError, ExpressionError
+from src.utils.errors import ExpressionError
 from src.utils.stack import Stack
 
 
@@ -20,7 +20,12 @@ class Calculator:
             '$': lambda a: a,
         }
 
-    def solve(self, expr: str):
+    def solve(self, expr: str) -> float:
+        """
+        Добавляет в стек числа при встрече знака делает расчёт
+        :param expr: выражение
+        :return: результат или ошибку (через raise)
+        """
         tokens = get_tokens(expr)
         numbers = Stack()
 
