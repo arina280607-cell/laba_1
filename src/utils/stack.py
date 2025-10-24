@@ -1,8 +1,10 @@
 class Stack:
-    lst = []
+    def __init__(self):
+        self.lst = []
 
     def push(self, x):
         self.lst.append(x)
+
 
     def pop(self):
         if not self.lst:
@@ -19,3 +21,6 @@ class Stack:
 
     def __len__(self) -> int:
         return len(self.lst)
+
+    def __repr__(self):
+        return str(self.lst)

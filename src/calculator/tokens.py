@@ -1,7 +1,7 @@
 import re
 
-from src.errors import CalcError, ParenthesisError
-from src.stack import Stack
+from src.utils.errors import ParenthesisError, InputError
+from src.utils.stack import Stack
 
 Token = tuple[str, float | None]  # ("NUM", 12.5) или ("+", None) и т.д.
 
@@ -23,9 +23,9 @@ def get_tokens(expr: str) -> list[Token]:
       | [%()+\-~$*/]          # одиночные токены
     )
 """, re.VERBOSE)
-
-    if not expr or not expr.strip():
-        raise CalcError("Пустой ввод")  # Провека, является ли входная строка пустой или состоящей только из пробелов
+    expr = expr.strip()
+    if not expr:
+        raise InputError("Пустой ввод")  # Провека, является ли входная строка пустой или состоящей только из пробелов
 
     pos = 0
     output: list[Token] = []
@@ -33,7 +33,7 @@ def get_tokens(expr: str) -> list[Token]:
     while pos < len(expr):
         m = regex.match(expr, pos)
         if not m:
-            raise CalcError(f"Некорректный ввод около: '{expr[pos:]}'")
+            raise InputError(f"Некорректный ввод около: '{expr[pos:]}'")
         element = m.group(1)
         pos = m.end()
 
@@ -50,6 +50,7 @@ def get_tokens(expr: str) -> list[Token]:
             else:
                 output.append((element, None))
     if not parenthesis.is_empty():
+        print(parenthesis)
         raise ParenthesisError("Несбалансированные скобки: есть незакрытые скобки")
 
     output.append(('EOF', None))
